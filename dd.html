@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sevdo 7 🎂</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.6);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            margin: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .top-btn {
+            background: pink;
+            color: black;
+        }
+
+        .age-btn {
+            background: #ff66cc;
+            color: white;
+        }
+
+        #uraBtn {
+            display: none;
+            background: yellow;
+            color: black;
+        }
+
+        /* ДР сайт */
+        body.birthdaySite {
+            font-family: 'Comic Sans MS', cursive;
+            text-align: center;
+            color: white;
+            background: linear-gradient(45deg, #ff9ad6, #a18cd1, #6dd5fa);
+            background-size: 400% 400%;
+            animation: bg 12s infinite alternate;
+        }
+
+        @keyframes bg {
+            0% {
+                background-position: left;
+            }
+
+            100% {
+                background-position: right;
+            }
+        }
+
+        section {
+            padding: 80px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 60px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px white;
+            }
+
+            to {
+                text-shadow: 0 0 40px yellow, 0 0 60px pink;
+            }
+        }
+
+        h2 {
+            font-size: 35px;
+            animation: fadeIn 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0.6;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Навигация */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .nav a {
+            color: white;
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        /* Карусель адаптивная */
+        .slider {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 20px;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+
+        .slides {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slides img {
+            flex-shrink: 0;
+            border-radius: 20px;
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            background: black;
+        }
+
+        /* Кнопки карусели */
+        .prev,
+        .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 30px;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        /* Шарики и сердечки */
+        .balloon {
+            position: fixed;
+            bottom: -100px;
+            width: 60px;
+            height: 80px;
+            border-radius: 50%;
+            animation: float 10s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                bottom: -100px;
+            }
+
+            100% {
+                bottom: 110%;
+            }
+        }
+
+        .heart {
+            position: fixed;
+            top: -50px;
+            font-size: 25px;
+            animation: fall 8s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+            }
+
+            100% {
+                top: 110%;
+            }
+        }
+
+        /* Галерея и видео */
+        .gallery img {
+            width: 80%;
+            max-width: 1000px;
+            margin: 10px 0;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        video {
+            width: 80%;
+            max-width: 1000px;
+            border-radius: 20px;
+        }
+
+        /* Адаптивность */
+        @media (max-width:1024px) {
+            h1 {
+                font-size: 50px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .slider {
+                padding-bottom: 75%;
+            }
+        }
+
+        @media (max-width:600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .slider {
+                padding-bottom: 150%;
+            }
+
+            .nav {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Экран выбора возраста -->
+    <div class="overlay" id="ageScreen">
+        <button class="top-btn" onclick="speakAge()">🔊 Я не умею читать</button>
+        <h1>🎂 Севдо 🎂</h1>
+        <h2>Сколько тебе лет?</h2>
+        <button class="age-btn" onclick="checkAge(1)">1</button>
+        <button class="age-btn" onclick="checkAge(20)">20</button>
+        <button class="age-btn" onclick="checkAge(7)">7</button>
+        <button class="age-btn" onclick="checkAge(6)">6</button>
+        <br><br>
+        <button id="uraBtn" onclick="showBirthday()">🎉 УРА 🎉</button>
+    </div>
+
+    <!-- ДР сайт -->
+    <div id="birthdaySite" style="display:none;">
+        <div class="nav">
+            <a href="#s1">Главная</a>
+            <a href="#s5">Сюрприз</a>
+            <a href="#s10">Галерея</a>
+            <a href="#s11">Видео</a>
+            <a href="#s15">Мини-игра</a>
+            <div style="position:fixed; top:10px; right:10px; z-index:1000;">
+                <a href="#s19" style="color:yellow; font-weight:bold; text-decoration:none;">🎁 секретик 🎁</a>
+                <a href="#s20">Финал</a>
+            </div>
+        </div>
+    </div>
+
+    <audio id="music2" loop>
+        <source src="deti-online.com_-_happy-birthday-to-you.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 1 Главная -->
+    <section id="s1">
+        <h1>🎉 С ДНЁМ РОЖДЕНИЯ СЕВДО 🎉</h1>
+        <h2>Тебе 7 лет! 👑</h2>
+        <button onclick="playMusic2()">🎵 Включить музыку</button>
+    </section>
+
+    <!-- 5 Сюрприз -->
+    <section id="s5">
+        <h2>🎊 Нажми для сюрприза 🎊</h2>
+        <button onclick="fireworks()">СЮРПРИЗ</button>
+    </section>
+
+    <!-- 10 Галерея -->
+    <section id="s10">
+        <h2>📸 Галерея Севдо 📸</h2>
+        <div class="slider">
+            <div class="slides">
+                <img src="sevdo1 (1).jpg">
+                <img src="sevdo1 (2).jpg">
+                <img src="sevdo1 (3).jpg">
+                <img src="sevdo1 (4).jpg">
+                <img src="sevdo1 (5).jpg">
+            </div>
+            <button class="prev" onclick="prevSlide()">❮</button>
+            <button class="next" onclick="nextSlide()">❯</button>
+        </div>
+    </section>
+
+    <!-- 11 Видео -->
+    <section id="s11">
+        <h2>🎥 Видео</h2>
+        <div>
+            <video controls>
+                <source src="your-video.mp4" type="video/mp4">
+                не поладки с днем Рождения сведо
+            </video>
+        </div>
+    </section>
+
+    <!-- 15 Мини-игра -->
+    <section id="s15">
+        <h2>🎮 Мини-игра 🎮</h2>
+        <canvas id="gameCanvas" width="400" height="400" style="border:2px solid white; background:black;"></canvas>
+        <p>Используй стрелки для движения квадрата, собери все желтые квадратики!</p>
+    </section>
+
+    <!-- 19 Твоя долгожданная игра -->
+    <section id="s19">
+        <h2>🎮 секретик настал🎮</h2>
+        <a href="https://5play.org/index.php?do=cdn&id=170220" download>
+            <button>⬇ Скачать игру</button>
+        </a>
+    </section>
+    <section id="s20">
+        <h1>🎆 КОНЕЦ ПРАЗДНИКА 🎆</h1>
+        <h2>Мы тебя любим 💖</h2>
+    </section>
+
+    </div>
+
+    <script>
+        // Экран возраста
+        function speakAge() {
+            let text = new SpeechSynthesisUtterance("Сколько тебе лет?");
+            text.lang = "ru-RU";
+            speechSynthesis.speak(text);
+        }
+
+        function checkAge(age) {
+            if (age == 7) {
+                alert("С Днем Рождения!");
+                document.getElementById("uraBtn").style.display = "inline-block";
+            } else {
+                alert("Ты же не такая большая!");
+            }
+        }
+
+        function showBirthday() {
+            document.getElementById("ageScreen").style.display = "none";
+            document.getElementById("birthdaySite").style.display = "block";
+            document.body.classList.add("birthdaySite");
+            document.querySelector(".nav").style.display = "block";
+        }
+
+        // Музыка
+        function playMusic2() { document.getElementById("music2").play(); }
+
+        // Карусель
+        let index = 0;
+        let slides = document.querySelector(".slides");
+        let total = document.querySelectorAll(".slides img").length;
+        function showSlide() { slides.style.transform = "translateX(-" + (index * 100) + "%)"; }
+        function nextSlide() { index++; if (index >= total) index = 0; showSlide(); }
+        function prevSlide() { index--; if (index < 0) index = total - 1; showSlide(); }
+        setInterval(nextSlide, 4000);
+
+        // Шарики
+        for (let i = 0; i < 15; i++) {
+            let b = document.createElement("div");
+            b.className = "balloon";
+            b.style.left = Math.random() * 100 + "%";
+            b.style.background = "hsl(" + Math.random() * 360 + ",80%,60%)";
+            b.style.animationDuration = (6 + Math.random() * 5) + "s";
+            document.body.appendChild(b);
+        }
+        // Сердечки
+        for (let i = 0; i < 20; i++) {
+            let h = document.createElement("div");
+            h.className = "heart";
+            h.innerHTML = "💖";
+            h.style.left = Math.random() * 100 + "%";
+            h.style.animationDuration = (5 + Math.random() * 5) + "s";
+            document.body.appendChild(h);
+        }
+
+        // Салют
+        function fireworks() {
+            for (let i = 0; i < 100; i++) {
+                let particle = document.createElement("div");
+                particle.style.position = "fixed";
+                particle.style.width = "5px";
+                particle.style.height = "5px";
+                particle.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)";
+                particle.style.top = window.innerHeight / 2 + "px";
+                particle.style.left = window.innerWidth / 2 + "px";
+                particle.style.borderRadius = "50%";
+                particle.style.zIndex = 9999;
+                document.body.appendChild(particle);
+                let x = Math.random() * 800 - 400;
+                let y = Math.random() * 800 - 400;
+                particle.animate([{ transform: `translate(0,0)`, opacity: 1 }, { transform: `translate(${x}px,${y}px)`, opacity: 0 }], { duration: 2000, easing: "ease-out" });
+                setTimeout(() => { particle.remove() }, 2000);
+            }
+        }
+
+        // Мини-игра s15
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let player = { x: 50, y: 50, size: 20 };
+        let keys = {};
+        let coins = [{ x: 100, y: 100 }, { x: 300, y: 200 }, { x: 200, y: 350 }];
+        document.addEventListener("keydown", e => keys[e.key] = true);
+        document.addEventListener("keyup", e => keys[e.key] = false);
+        function gameLoop() {
+            if (keys.ArrowUp) player.y -= 3;
+            if (keys.ArrowDown) player.y += 3;
+            if (keys.ArrowLeft) player.x -= 3;
+            if (keys.ArrowRight) player.x += 3;
+            player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+            player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+            coins = coins.filter(c => !(Math.abs(c.x - player.x) < player.size && Math.abs(c.y - player.y) < player.size));
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "yellow";
+            coins.forEach(c => ctx.fillRect(c.x, c.y, 15, 15));
+            ctx.fillStyle = "red";
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+            requestAnimationFrame(gameLoop);
+        }
+        gameLoop();
+
+        // Мини-игра s19
+        const canvas2 = document.getElementById("gameCanvas2");
+        const ctx2 = canvas2.getContext("2d");
+        let player2 = { x: 50, y: 50, size: 20 };
+        let keys2 = {};
+        let coins2 = [{ x: 100, y: 100 }, { x: 300, y: 200 }, { x: 200, y: 350 }];
+        document.addEventListener("keydown", e => keys2[e.key] = true);
+        document.addEventListener("keyup", e => keys2[e.key] = false);
+        function gameLoop2() {
+            if (keys2.ArrowUp) player2.y -= 3;
+            if (keys2.ArrowDown) player2.y += 3;
+            if (keys2.ArrowLeft) player2.x -= 3;
+            if (keys2.ArrowRight) player2.x += 3;
+            player2.x = Math.max(0, Math.min(canvas2.width - player2.size, player2.x));
+            player2.y = Math.max(0, Math.min(canvas2.height - player2.size, player2.y));
+            coins2 = coins2.filter(c => !(Math.abs(c.x - player2.x) < player2.size && Math.abs(c.y - player2.y) < player2.size));
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            ctx2.fillStyle = "yellow";
+            coins2.forEach(c => ctx2.fillRect(c.x, c.y, 15, 15));
+            ctx2.fillStyle = "red";
+            ctx2.fillRect(player2.x, player2.y, player2.size, player2.size);
+            requestAnimationFrame(gameLoop2);
+        }
+        gameLoop2();
+    </script>
+
+</body>
+
+</html>
